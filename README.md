@@ -1,5 +1,8 @@
 # dbtui.nvim
 <img width="820" height="127" alt="691152670-c1943efa-e24c-4c7a-95f8-e1a397d6d8d1" src="https://github.com/user-attachments/assets/1cda11a6-ddd7-47d2-a921-b0eb83c12da7" />
+
+https://github.com/user-attachments/assets/c00b414c-693d-469d-ab7d-d5495d9b85fe
+
 <img width="1904" height="1025" alt="image" src="https://github.com/user-attachments/assets/4c15f6f1-1ef6-4137-b5f5-840589390735" />
 
 Project-aware database TUI launcher for Neovim. It detects database connections, lets the user choose an environment,
