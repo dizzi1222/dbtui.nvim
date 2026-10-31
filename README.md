@@ -1,9 +1,10 @@
 # dbtui.nvim
-<img width="820" height="127" alt="691152670-c1943efa-e24c-4c7a-95f8-e1a397d6d8d1" src="https://github.com/user-attachments/assets/1cda11a6-ddd7-47d2-a921-b0eb83c12da7" />
 
-https://github.com/user-attachments/assets/c00b414c-693d-469d-ab7d-d5495d9b85fe
+![DB TUI notification](https://github.com/user-attachments/assets/1cda11a6-ddd7-47d2-a921-b0eb83c12da7)
 
-<img width="1904" height="1025" alt="image" src="https://github.com/user-attachments/assets/4c15f6f1-1ef6-4137-b5f5-840589390735" />
+[DB TUI demo video](https://github.com/user-attachments/assets/c00b414c-693d-469d-ab7d-d5495d9b85fe)
+
+![DB TUI connection picker](https://github.com/user-attachments/assets/4c15f6f1-1ef6-4137-b5f5-840589390735)
 
 Project-aware database TUI launcher for Neovim. It detects database connections, lets the user choose an environment,
 and opens the appropriate client in a floating terminal.
@@ -14,7 +15,6 @@ and opens the appropriate client in a floating terminal.
 - MongoDB connections through `mongosh`.
 - Automatic detection from `.env`, `.env.qa`, `.env.production`, and Docker Compose files.
 - Read-only and edit modes for PostgreSQL.
-- Explicit `PROD EDIT` confirmation before opening a production connection with write access.
 - English and Spanish interfaces.
 - Custom project profiles and adapters.
 - Snacks terminal integration with a built-in Neovim terminal fallback.
@@ -102,6 +102,7 @@ The profile context contains `root`, `cwd`, and the normalized Git `remote`. A c
 The built-in detector recognizes:
 
 - PostgreSQL variables such as `DB_NAME`, `DB_USER`, `DB_HOST`, and their `PG*` equivalents.
+- Configured PostgreSQL ports from `DB_PORT` or `PGPORT`, without a hardcoded proxy port.
 - MongoDB URIs in `MONGODB_URI`, `MONGO_URI`, or `MONGO_URL`.
 - A local MongoDB service using the official `mongo` image in a Compose file.
 
@@ -114,6 +115,9 @@ PostgreSQL passwords are never placed in the process arguments. The LazySQL adap
 terminal starts, writes it to a temporary `PGPASSFILE` with mode `0600`, and deletes the file when the process exits.
 Read-only mode also sets PostgreSQL session defaults, but a dedicated read-only database role remains the strongest
 server-enforced protection.
+
+Write mode opens the selected connection directly, including production connections. Database access remains the
+user's responsibility; use server-side roles and permissions when additional safeguards are required.
 
 MongoDB does not expose an equivalent client-side read-only mode. Its effective permissions come from the MongoDB user
 roles, so use a read-only account whenever writes must be impossible.

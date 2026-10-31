@@ -125,22 +125,6 @@ local function connect(profile, connection, adapter, mode, messages, options)
   end)
 end
 
-local function confirm_production(profile, connection, adapter, mode, messages, options)
-  if connection.environment ~= "prod" or not mode.write then
-    connect(profile, connection, adapter, mode, messages, options)
-    return
-  end
-
-  local endpoint = connection.host and string.format("%s:%s", connection.host, connection.port or "?") or connection.uri
-  vim.ui.input({ prompt = string.format(messages.prod_confirm, endpoint) }, function(confirmation)
-    if confirmation == "PROD EDIT" then
-      connect(profile, connection, adapter, mode, messages, options)
-    elseif confirmation then
-      notify(messages.prod_cancelled, vim.log.levels.WARN)
-    end
-  end)
-end
-
 local function choose_mode(profile, connection, options, messages)
   local adapter = adapter_for(connection.adapter, options)
   if not adapter then
@@ -154,7 +138,7 @@ local function choose_mode(profile, connection, options, messages)
 
   local modes = adapter.modes(messages)
   if #modes == 1 then
-    confirm_production(profile, connection, adapter, modes[1], messages, options)
+    connect(profile, connection, adapter, modes[1], messages, options)
     return
   end
   vim.ui.select(modes, {
@@ -164,7 +148,7 @@ local function choose_mode(profile, connection, options, messages)
     prompt = string.format(messages.connection_prompt, connection.label),
   }, function(mode)
     if mode then
-      confirm_production(profile, connection, adapter, mode, messages, options)
+      connect(profile, connection, adapter, mode, messages, options)
     end
   end)
 end
